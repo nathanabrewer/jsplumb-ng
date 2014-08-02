@@ -1,0 +1,67 @@
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Connections between States</h3>
+    </div>
+    <div class="panel-body">
+        <table class="table">
+            <tr>
+                <th>Index</th>
+                <th>Source</th>
+                <th>Target</th>
+                <th>Options</th>
+            </tr>
+            <tr ng-repeat="connection in stateConnections">
+                <td>{{$index}}</td>
+                <td>{{connection.sourceUUID}}</td>
+                <td>{{connection.targetUUID}} </td>
+                <td><a href ng-click="removeConnection($index)"><span class="glyphicon glyphicon-trash"></span></a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h3 class="panel-title">States</h3>
+    </div>
+    <div class="panel-body">
+        <div ng-repeat="state in stateObjects">
+            [ Index {{$index}} ] ==> {{state.name}}
+        </div>
+    </div>
+</div>
+
+<!-- panel for looking at connection, shows when you click on a connection -->
+<div ng-if="activeConnection" class="panel panel-success">
+    <div class="panel-heading">
+        <h3 class="panel-title">Connection {{activeConnection.index}}</h3>
+    </div>
+    <div class="panel-body">
+        <div class="btn-group">
+            <label class="btn btn-primary" ng-click="removeConnection(activeConnection.index)">
+                <span class="glyphicon glyphicon-trash"></span>
+            </label>
+            <label class="btn btn-primary" ng-click="addTo(activeConnection.connection)">
+                <span class="glyphicon glyphicon-plus"></span>
+            </label>
+        </div>
+    </div>
+</div>
+
+<!-- panel for looking at connection, shows when you click on a connection -->
+<div ng-if="activeState" class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">State {{activeState.index}} -- {{activeState.state.name}}</h3>
+    </div>
+    <div class="panel-body">
+        <div class="btn-group">
+            <label class="btn btn-primary">
+                {{activeState.state.x}}
+            </label>
+            <label class="btn btn-primary">
+                {{activeState.state.y}}
+            </label>
+        </div>
+    </div>
+</div>
