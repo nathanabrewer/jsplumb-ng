@@ -1,68 +1,9 @@
 var myApp = angular.module('plumbApp.directives', []);
 
 
-myApp.factory('plumbOptions', function(){
-    return {
-        'connectorPaintStyle':{
-            lineWidth:4,
-            strokeStyle:"#61B7CF",
-            joinstyle:"round",
-            outlineColor:"white",
-            outlineWidth:2
-        },
-        'connectorHoverStyle': {
-            lineWidth:4,
-            strokeStyle:"#216477",
-            outlineWidth:2,
-            outlineColor:"white"
-        },
-        'endpointHoverStyle': {
-            fillStyle:"#216477",
-            strokeStyle:"#216477"
-        },
-        // the definition of source endpoints (the small blue ones)
-        'sourceEndpoint': {
-            endpoint:"Dot",
-            paintStyle:{
-                strokeStyle:"#7AB02C",
-                fillStyle:"transparent",
-                radius:7,
-                lineWidth:3
-            },
-            isSource:true,
-            connector:[ "Flowchart", { stub:[40, 60], gap:10, cornerRadius:5, alwaysRespectStubs:true } ],
-            connectorStyle:this.connectorPaintStyle,
-            hoverPaintStyle:this.endpointHoverStyle,
-            connectorHoverStyle:this.connectorHoverStyle,
-            dragOptions:{}
-//            overlays:[
-//                [ "Label", {
-//                    location:[0.5, 1.5],
-//                    label:"Drag",
-//                    cssClass:"endpointSourceLabel"
-//                } ]
-//            ]
-        },
-        // the definition of target endpoints (will appear when the user drags a connection)
-        'targetEndpoint': {
-            endpoint:"Dot",
-            paintStyle:{ fillStyle:"#7AB02C",radius:11 },
-            hoverPaintStyle: this.endpointHoverStyle,
-            maxConnections:-1,
-            dropOptions:{ hoverClass:"hover", activeClass:"active" },
-            isTarget:true,
-//            overlays:[
-//                [ "Label", { location:[0.5, -0.5], label:"Drop", cssClass:"endpointTargetLabel" } ]
-//            ]
-        }
-    };
-});
-
-
-
 myApp.directive('jsPlumbCanvas', function(){
    var jsPlumbZoomCanvas = function(instance, zoom, el, transformOrigin) {
-       transformOrigin = transformOrigin || [ 0.5, 0.5 ];
+       transformOrigin = transformOrigin || [ 0, 0];
        var p = [ "webkit", "moz", "ms", "o" ],
            s = "scale(" + zoom + ")",
            oString = (transformOrigin[0] * 100) + "% " + (transformOrigin[1] * 100) + "%";
@@ -147,7 +88,7 @@ myApp.directive('jsPlumbCanvas', function(){
    return def;
 });
 
-myApp.directive('jsPlumbObject', function(plumbOptions) {
+myApp.directive('jsPlumbObject', function() {
     var def = {
         restrict : 'E',
         require: '^jsPlumbCanvas',
@@ -174,14 +115,13 @@ myApp.directive('jsPlumbObject', function(plumbOptions) {
     return def;
 });
 
-myApp.directive('jsPlumbEndpoint', function(plumbOptions) {
+myApp.directive('jsPlumbEndpoint', function() {
     var def = {
         restrict : 'E',
         require: '^jsPlumbCanvas',
         scope: {
             settings: '=settings'
         },
-        transclude : true,
         link : function(scope, element, attrs, jsPlumbCanvas) {
             var instance = jsPlumbCanvas.scope.jsPlumbInstance;
 
@@ -210,7 +150,7 @@ myApp.directive('jsPlumbConnection', function($timeout) {
         require: '^jsPlumbCanvas',
         scope: {
             ngClick: '&ngClick',
-            connection: '=connection'
+            ngModel: '=ngModel'
         },
         link : function(scope, element, attrs, jsPlumbCanvas)
         {
@@ -221,22 +161,32 @@ myApp.directive('jsPlumbConnection', function($timeout) {
 
             $timeout(function(){
 
-                if(typeof scope.connection.conn === 'undefined'){
-                    scope.connection.conn = instance.connect({
+                if(typeof scope.ngModel.conn === 'undefined'){
+                    scope.ngModel.conn = instance.connect({
                         uuids:[
-                            scope.connection.targetUUID,
-                            scope.connection.sourceUUID
+                            scope.ngModel.targetUUID,
+                            scope.ngModel.sourceUUID
                         ],
                         overlays:[
                             [ "Label", {label:"", id:"label"}]
                         ], editable:true});
                 }
 
-                var connection = scope.connection.conn;
+                var connection = scope.ngModel.conn;
 
                 console.log('[---------][directive][jsPlumbConnection] ', connection);
+
                 connection.bind("click", function(conn, originalEvent) {
                     scope.ngClick();
+                    scope.$apply();
+                });
+
+                connection.bind("mouseenter", function(conn, originalEvent) {
+                    scope.ngModel.mouseover = true;
+                    scope.$apply();
+                });
+                connection.bind("mouseleave", function(conn, originalEvent) {
+                    scope.ngModel.mouseover = false;
                     scope.$apply();
                 });
 
@@ -249,12 +199,12 @@ myApp.directive('jsPlumbConnection', function($timeout) {
                 }
 
 
-            }, 500);
+            }, 300);
 
 
             scope.$on('$destroy', function(){
                 console.log('got destroy call');
-                instance.detach(scope.connection.conn);
+                instance.detach(scope.ngModel.conn);
             });
 
         }

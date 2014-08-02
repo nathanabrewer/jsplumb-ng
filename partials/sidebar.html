@@ -11,11 +11,13 @@
                 <th>Target</th>
                 <th>Options</th>
             </tr>
-            <tr ng-repeat="connection in stateConnections">
+            <tr ng-repeat="connection in stateConnections" ng-class="{'warning': connection.mouseover}">
                 <td>{{$index}}</td>
                 <td>{{connection.sourceUUID}}</td>
                 <td>{{connection.targetUUID}} </td>
-                <td><a href ng-click="removeConnection($index)"><span class="glyphicon glyphicon-trash"></span></a></td>
+                <td>
+                    <a href ng-click="removeConnection($index)"><span class="glyphicon glyphicon-trash"></span></a>
+                </td>
             </tr>
         </table>
     </div>

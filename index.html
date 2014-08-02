@@ -28,9 +28,17 @@
                 <js-plumb-canvas on-connection="onConnection" x="pos_x" y="pos_y" zoom="zoomlevel">
                     <js-plumb-object state-object="state" ng-style="{ 'left':state.x, 'top':state.y }" class="window" ng-repeat="state in stateObjects">
                         <span ng-click="setActiveState($index)">{{state.name}}</span>
-                        <js-plumb-endpoint ng-repeat="endpoint in state.endpoints" anchor="{{endpoint.position}}" uuid="{{endpoint.uuid}}" settings="endpoint.type"></js-plumb-endpoint>
+
+                        <div class="row">
+                            <div style="background-color:#ccc;" class="col-sm-6">
+                                <js-plumb-endpoint ng-repeat="endpoint in state.sources" anchor="{{endpoint.position}}" uuid="{{endpoint.uuid}}" settings="sourceEndpointStyle"></js-plumb-endpoint>
+                            </div>
+                            <div style="background-color:#333;" class="col-sm-6">
+                                <js-plumb-endpoint ng-repeat="endpoint in state.targets" anchor="{{endpoint.position}}" uuid="{{endpoint.uuid}}" settings="targetEndpointStyle"></js-plumb-endpoint>
+                            </div>
+                        </div>
                     </js-plumb-object>
-                    <js-plumb-connection ng-click="setActiveConnection($index)" ng-repeat="connection in stateConnections" connection="connection">
+                    <js-plumb-connection ng-click="setActiveConnection($index)" ng-repeat="connection in stateConnections" ng-model="connection">
                         <!-- we can have html content in here... inside the directive I attempt to attach it to the connection label, which works somewhat, but once you delete a connection it reverts to unwanted behavior -->
                     </js-plumb-connection>
                 </js-plumb-canvas>
@@ -41,15 +49,21 @@
             <!-- just to illustrate a second instance of jsPlumb operating -->
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title">jsPlumb Secondary Canvas</h3>
+                    <h3 class="panel-title">
+                        jsPlumb Secondary Canvas
+                        <div class="col-sm-4 pull-right">
+                            <div ui-slider min="0" max="100" ng-model="zoomlevel"></div>
+                        </div>
+                    </h3>
                 </div>
                 <div class="panel-body" style="overflow:hidden; height:200px;">
-                    <js-plumb-canvas on-connection="onConnection">
+                    <js-plumb-canvas on-connection="onConnection" x="pos_x" y="pos_y" zoom="zoomlevel">
                         <js-plumb-object state-object="state" ng-style="{ 'left':state.x, 'top':state.y }" class="window" ng-repeat="state in states">
                             <span >{{state.name}}</span>
-                            <js-plumb-endpoint ng-repeat="endpoint in state.endpoints" anchor="{{endpoint.position}}" uuid="{{endpoint.uuid}}" settings="endpoint.type"></js-plumb-endpoint>
+                            <js-plumb-endpoint ng-repeat="endpoint in state.sources" anchor="{{endpoint.position}}" uuid="{{endpoint.uuid}}" settings="sourceEndpointStyle"></js-plumb-endpoint>
+                            <js-plumb-endpoint ng-repeat="endpoint in state.targets" anchor="{{endpoint.position}}" uuid="{{endpoint.uuid}}" settings="targetEndpointStyle"></js-plumb-endpoint>
                         </js-plumb-object>
-                        <js-plumb-connection ng-repeat="connection in connections" connection="connection">
+                        <js-plumb-connection ng-repeat="connection in connections" ng-model="connection">
                             Connection {{$index}}
                         </js-plumb-connection>
                     </js-plumb-canvas>

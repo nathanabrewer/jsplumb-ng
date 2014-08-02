@@ -1,43 +1,93 @@
 var myApp = angular.module('plumbApp.controllers', []);
 
-myApp.controller('PlumbCtrl', function($scope, plumbOptions) {
+myApp.controller('PlumbCtrl', function($scope) {
 
-    $scope.zoomlevel = 100;
+    $scope.zoomlevel = 70;
     $scope.pos_x = 0;
     $scope.pos_y = 0;
 
-    $scope.plumbOptions = plumbOptions;
+    $scope.targetEndpointStyle = {
+        endpoint:"Dot",
+        paintStyle:{ fillStyle:"#7AB02C",radius:11 },
+        hoverPaintStyle: {
+            fillStyle:"#216477",
+            strokeStyle:"#216477"
+        },
+        maxConnections:-1,
+            dropOptions:{
+                hoverClass:"hover",
+                activeClass:"active"
+        },
+        isTarget:true
+    };
+
+    $scope.sourceEndpointStyle = {
+        endpoint:"Dot",
+        paintStyle:{
+            strokeStyle:"#7AB02C",
+            fillStyle:"transparent",
+            radius:7,
+            lineWidth:3
+        },
+        isSource:true,
+        connector:[ "Flowchart", { stub:[40, 60], gap:10, cornerRadius:20, alwaysRespectStubs:true } ],
+        connectorStyle:{
+            lineWidth:4,
+            strokeStyle:"#61B7CF",
+            joinstyle:"round",
+            outlineColor:"white",
+            outlineWidth:2
+        },
+        hoverPaintStyle:{
+            lineWidth:4,
+            strokeStyle:"#216477",
+            outlineWidth:2,
+            outlineColor:"white"
+        },
+        connectorHoverStyle:{
+            fillStyle:"#216477",
+            strokeStyle:"#216477"
+        },
+        dragOptions:{}
+    };
 
     $scope.stateObjects = [
 
         {   'name': 'jsPlumb',
-            'endpoints': [
-                { position: 'TopCenter',    type: plumbOptions.sourceEndpoint, uuid:10000},
-                { position: 'BottomCenter', type: plumbOptions.sourceEndpoint, uuid:20000},
-                { position: 'LeftMiddle',   type: plumbOptions.targetEndpoint, uuid:30000},
-                { position: 'RightMiddle',  type: plumbOptions.targetEndpoint, uuid:40000}
+            'sources': [
+                { position: 'TopCenter',    uuid:10000},
+                { position: 'BottomCenter', uuid:20000}
+            ],
+            'targets': [
+                { position: 'LeftMiddle',   uuid:30000},
+                { position: 'RightMiddle',  uuid:40000}
             ],
             'x': 550,
             'y': 130
         },
+
         {   'name': 'Brewer',
-            'endpoints': [
-                { position: 'TopCenter',    type: plumbOptions.sourceEndpoint, uuid:50000},
-                { position: 'BottomCenter', type: plumbOptions.sourceEndpoint, uuid:60000},
-                { position: 'LeftMiddle',   type: plumbOptions.targetEndpoint, uuid:70000},
-                { position: 'RightMiddle',  type: plumbOptions.targetEndpoint, uuid:80000}
+            'sources': [
+                { position: 'TopCenter',    uuid:50000},
+                { position: 'BottomCenter', uuid:60000},
+            ],
+            'targets': [
+                { position: 'LeftMiddle',   uuid:70000},
+                { position: 'RightMiddle',  uuid:80000}
             ],
             'x': 100,
             'y': 260
         },
         {   'name': 'AngularJS',
-            'endpoints': [
-                { position: 'TopCenter',    type: plumbOptions.sourceEndpoint, uuid:90000},
-                { position: 'TopCenter',    type: plumbOptions.sourceEndpoint, uuid:90002},
-                { position: 'TopCenter',    type: plumbOptions.sourceEndpoint, uuid:90004},
-                { position: 'BottomCenter', type: plumbOptions.sourceEndpoint, uuid:100000},
-                { position: 'LeftMiddle',   type: plumbOptions.targetEndpoint, uuid:110000},
-                { position: 'RightMiddle',  type: plumbOptions.targetEndpoint, uuid:120000}
+            'sources': [
+                { position: 'TopCenter',    uuid:90000},
+                { position: 'TopCenter',    uuid:90002},
+                { position: 'TopCenter',    uuid:90004},
+                { position: 'BottomCenter', uuid:100000},
+            ],
+            'targets': [
+                { position: 'LeftMiddle',   uuid:110000},
+                { position: 'RightMiddle',  uuid:120000}
             ],
             'x': 230,
             'y': 460
@@ -50,46 +100,10 @@ myApp.controller('PlumbCtrl', function($scope, plumbOptions) {
         { targetUUID:30000, sourceUUID:90000  }
     ];
 
-
-    $scope.stateObjects_B = [
-
-        {   'name': 'Secondary Test',
-            'endpoints': [
-                { position: 'TopCenter',    type: plumbOptions.sourceEndpoint, uuid:10000},
-                { position: 'BottomCenter', type: plumbOptions.sourceEndpoint, uuid:20000},
-                { position: 'LeftMiddle',   type: plumbOptions.targetEndpoint, uuid:30000},
-                { position: 'RightMiddle',  type: plumbOptions.targetEndpoint, uuid:40000}
-            ],
-            'x': 550,
-            'y': 130
-        },
-        {   'name': 'True Enough',
-            'endpoints': [
-                { position: 'TopCenter',    type: plumbOptions.sourceEndpoint, uuid:50000},
-                { position: 'BottomCenter', type: plumbOptions.sourceEndpoint, uuid:60000},
-                { position: 'LeftMiddle',   type: plumbOptions.targetEndpoint, uuid:70000},
-                { position: 'RightMiddle',  type: plumbOptions.targetEndpoint, uuid:80000}
-            ],
-            'x': 100,
-            'y': 260
-        }
-
-    ];
-    $scope.stateConnections_B = [
-        { targetUUID:10000, sourceUUID:70000  },
-        { targetUUID:30000, sourceUUID:50000  }
-    ];
     $scope.removeConnection = function(index){
         $scope.stateConnections.splice(index,1);
-        console.log('[scope][removeConnection] -- splicing index', index);
     }
-    $scope.addTo = function(ya){
-        if(typeof ya.count == 'undefined'){
-            ya.count=0;
-        }else{
-            ya.count++;
-        }
-    }
+
 
 
     $scope.setActiveConnection = function(index){
@@ -136,36 +150,35 @@ myApp.controller('PlumbCtrl', function($scope, plumbOptions) {
 
     }
 
-    $scope.onConnection_B = function(instance, connection, targetUUID, sourceUUID){
-      alert('Thanks for making that connection... between '+targetUUID+' and '+sourceUUID);
-    };
-
-
 });
 
 
-myApp.controller('SecondaryExampleController', function($scope, plumbOptions) {
 
-    $scope.plumbOptions = plumbOptions;
+
+myApp.controller('SecondaryExampleController', function($scope) {
 
     $scope.states = [
 
         {   'name': 'Secondary Test',
-            'endpoints': [
-                { position: 'TopCenter',    type: plumbOptions.sourceEndpoint, uuid:10000},
-                { position: 'BottomCenter', type: plumbOptions.sourceEndpoint, uuid:20000},
-                { position: 'LeftMiddle',   type: plumbOptions.targetEndpoint, uuid:30000},
-                { position: 'RightMiddle',  type: plumbOptions.targetEndpoint, uuid:40000}
+            'sources': [
+                { position: 'TopCenter',    uuid:10000},
+                { position: 'BottomCenter', uuid:20000},
+            ],
+            'targets': [
+                { position: 'LeftMiddle',   uuid:30000},
+                { position: 'RightMiddle',  uuid:40000}
             ],
             'x': 550,
             'y': 130
         },
         {   'name': 'True Enough',
-            'endpoints': [
-                { position: 'TopCenter',    type: plumbOptions.sourceEndpoint, uuid:50000},
-                { position: 'BottomCenter', type: plumbOptions.sourceEndpoint, uuid:60000},
-                { position: 'LeftMiddle',   type: plumbOptions.targetEndpoint, uuid:70000},
-                { position: 'RightMiddle',  type: plumbOptions.targetEndpoint, uuid:80000}
+            'sources': [
+                { position: 'TopCenter',    uuid:50000},
+                { position: 'BottomCenter', uuid:60000},
+            ],
+            'targets': [
+                { position: 'LeftMiddle',   uuid:70000},
+                { position: 'RightMiddle',  uuid:80000}
             ],
             'x': 100,
             'y': 260

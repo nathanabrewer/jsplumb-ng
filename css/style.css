@@ -1,23 +1,28 @@
 
 .endpoint_TopCenter{
-    position:absolute;
-    top:0px;
-    left:50%;
+
+    width:30px;
+    height:30px;
+    float:left;
+    clear:both;
 }
 .endpoint_BottomCenter{
-    position:absolute;
-    bottom:0px;
-    left:50%;
+    width:30px;
+    height:30px;
+    float:left;
+    clear:both;
 }
 .endpoint_LeftMiddle{
-    position:absolute;
-    left:0px;
-    top:50%;
+    width:30px;
+    height:30px;
+    float:left;
+    clear:both;
 }
 .endpoint_RightMiddle{
-    position:absolute;
-    right:0px;
-    top:50%;
+    width:30px;
+    height:30px;
+    float:left;
+    clear:both;
 }
 
 .window {
@@ -50,14 +55,4 @@
     filter:alpha(opacity=60);
 }
 
-.active {
-    border:1px dotted green;
-}
-.hover {
-    border:1px dotted red;
-}
 
-
-
-._jsPlumb_endpoint,
-.endpointSourceLabel{ z-index:21;cursor:pointer; }
