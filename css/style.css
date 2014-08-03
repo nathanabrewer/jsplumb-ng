@@ -1,31 +1,10 @@
 
-.endpoint_TopCenter{
+.endpoint_TopCenter, .endpoint_BottomCenter, .endpoint_LeftMiddle, .endpoint_RightMiddle{
+    display:inline-block;
 
-    width:30px;
-    height:30px;
-    float:left;
-    clear:both;
-}
-.endpoint_BottomCenter{
-    width:30px;
-    height:30px;
-    float:left;
-    clear:both;
-}
-.endpoint_LeftMiddle{
-    width:30px;
-    height:30px;
-    float:left;
-    clear:both;
-}
-.endpoint_RightMiddle{
-    width:30px;
-    height:30px;
-    float:left;
-    clear:both;
 }
 
-.window {
+.state_window {
     border:1px solid #346789;
     box-shadow: 2px 2px 19px #aaa;
     -o-box-shadow: 2px 2px 19px #aaa;

@@ -25,12 +25,20 @@
 
 <div class="panel panel-success">
     <div class="panel-heading">
+        <div class="btn btn-default pull-right" ng-click="newState()">
+            <span class="glyphicon glyphicon-plus"></span>
+        </div>
+        <div class="btn btn-default pull-right" ng-click="showjson=!showjson">
+            <span class="glyphicon glyphicon-info-sign"></span>
+        </div>
         <h3 class="panel-title">States</h3>
     </div>
     <div class="panel-body">
-        <div ng-repeat="state in stateObjects">
+
+        <div ng-if="!showjson" ng-repeat="state in stateObjects">
             [ Index {{$index}} ] ==> {{state.name}}
         </div>
+        <pre ng-if="showjson">{{stateObjects | json }}</pre>
     </div>
 </div>
 
@@ -57,6 +65,7 @@
         <h3 class="panel-title">State {{activeState.index}} -- {{activeState.state.name}}</h3>
     </div>
     <div class="panel-body">
+        <input type="text" ng-model="activeState.state.name"/>
         <div class="btn-group">
             <label class="btn btn-primary">
                 {{activeState.state.x}}

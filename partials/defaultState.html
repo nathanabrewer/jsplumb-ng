@@ -1,0 +1,11 @@
+<js-plumb-object state-object="state" ng-style="{ 'left':state.x, 'top':state.y }" class="state_window" >
+    <h3 ng-click="setActiveState($index)">{{state.name}}</h3>
+    <div>
+        <div ng-repeat="endpoint in state.sources" class="col-sm-1">
+            <js-plumb-endpoint anchor="BottomCenter" uuid="{{endpoint.uuid}}" settings="sourceEndpointStyle"></js-plumb-endpoint>
+        </div>
+        <div ng-repeat="endpoint in state.targets" class="col-sm-1">
+            <js-plumb-endpoint anchor="BottomCenter" uuid="{{endpoint.uuid}}" settings="targetEndpointStyle"></js-plumb-endpoint>
+        </div>
+    </div>
+</js-plumb-object>

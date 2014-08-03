@@ -9,44 +9,41 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body ng-controller="PlumbCtrl">
+<body>
+    <div ng-controller="FirstExampleController">
+        <div class="col-sm-4" ng-include="'partials/sidebar.html'"></div>
 
-    <div class="col-sm-4" ng-include="'partials/sidebar.html'"></div>
+        <div class="col-sm-8" >
 
-    <div class="col-sm-8" >
-
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    jsPlumb Canvas 1 ({{pos_x}}, {{pos_y}}, {{zoomlevel}})
-                    <div class="col-sm-4 pull-right">
-                        <div ui-slider min="0" max="100" ng-model="zoomlevel"></div>
-                    </div>
-                </h3>
-            </div>
-            <div class="panel-body" style="overflow:hidden; height:400px;">
-                <js-plumb-canvas on-connection="onConnection" x="pos_x" y="pos_y" zoom="zoomlevel">
-                    <js-plumb-object state-object="state" ng-style="{ 'left':state.x, 'top':state.y }" class="window" ng-repeat="state in stateObjects">
-                        <span ng-click="setActiveState($index)">{{state.name}}</span>
-
-                        <div class="row">
-                            <div style="background-color:#ccc;" class="col-sm-6">
-                                <js-plumb-endpoint ng-repeat="endpoint in state.sources" anchor="{{endpoint.position}}" uuid="{{endpoint.uuid}}" settings="sourceEndpointStyle"></js-plumb-endpoint>
-                            </div>
-                            <div style="background-color:#333;" class="col-sm-6">
-                                <js-plumb-endpoint ng-repeat="endpoint in state.targets" anchor="{{endpoint.position}}" uuid="{{endpoint.uuid}}" settings="targetEndpointStyle"></js-plumb-endpoint>
-                            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        jsPlumb Canvas 1 ({{pos_x}}, {{pos_y}}, {{zoomlevel}})
+                        <div class="col-sm-4 pull-right">
+                            <div ui-slider min="0" max="100" ng-model="zoomlevel"></div>
                         </div>
-                    </js-plumb-object>
-                    <js-plumb-connection ng-click="setActiveConnection($index)" ng-repeat="connection in stateConnections" ng-model="connection">
-                        <!-- we can have html content in here... inside the directive I attempt to attach it to the connection label, which works somewhat, but once you delete a connection it reverts to unwanted behavior -->
-                    </js-plumb-connection>
-                </js-plumb-canvas>
+                    </h3>
+                </div>
+                <div class="panel-body" style="overflow:hidden; height:400px;">
+                    <js-plumb-canvas on-connection="onConnection" x="pos_x" y="pos_y" zoom="zoomlevel">
+
+                        <ng-include src="getTemplate(state)" ng-repeat="state in stateObjects"></ng-include>
+
+                        <js-plumb-connection ng-click="setActiveConnection($index)" ng-repeat="connection in stateConnections" ng-model="connection">
+                            <!-- we can have html content in here... inside the directive I attempt to attach it to the connection label, which works somewhat, but once you delete a connection it reverts to unwanted behavior -->
+                        </js-plumb-connection>
+                    </js-plumb-canvas>
+                </div>
             </div>
         </div>
+    </div>
 
-        <div ng-controller="SecondaryExampleController">
-            <!-- just to illustrate a second instance of jsPlumb operating -->
+    <!-- just to illustrate a second instance of jsPlumb operating -->
+    <div ng-controller="SecondaryExampleController">
+        <div class="col-sm-4"></div>
+
+        <div class="col-sm-8" >
+
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <h3 class="panel-title">
@@ -58,6 +55,7 @@
                 </div>
                 <div class="panel-body" style="overflow:hidden; height:200px;">
                     <js-plumb-canvas on-connection="onConnection" x="pos_x" y="pos_y" zoom="zoomlevel">
+
                         <js-plumb-object state-object="state" ng-style="{ 'left':state.x, 'top':state.y }" class="window" ng-repeat="state in states">
                             <span >{{state.name}}</span>
                             <js-plumb-endpoint ng-repeat="endpoint in state.sources" anchor="{{endpoint.position}}" uuid="{{endpoint.uuid}}" settings="sourceEndpointStyle"></js-plumb-endpoint>
@@ -71,9 +69,9 @@
                 </div>
             </div>
         </div>
-
-
     </div>
+
+
 
 
 
@@ -89,9 +87,11 @@
     <script src="bower_components/angular-ui-slider/src/slider.js"></script>
 
     <!-- out local ng stuff -->
-    <script src="js/controller.js"></script>
     <script src="js/directives.js"></script>
+
     <script src="js/app.js"></script>
+    <script src="js/firstController.js"></script>
+    <script src="js/secondController.js"></script>
 
 </body>
 </html>
