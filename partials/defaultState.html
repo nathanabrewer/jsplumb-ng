@@ -1,11 +1,17 @@
 <js-plumb-object state-object="state" ng-style="{ 'left':state.x, 'top':state.y }" class="state_window" >
-    <h3 ng-click="setActiveState($index)">{{state.name}}</h3>
-    <div>
-        <div ng-repeat="endpoint in state.sources" class="col-sm-1">
-            <js-plumb-endpoint anchor="BottomCenter" uuid="{{endpoint.uuid}}" settings="sourceEndpointStyle"></js-plumb-endpoint>
-        </div>
-        <div ng-repeat="endpoint in state.targets" class="col-sm-1">
-            <js-plumb-endpoint anchor="BottomCenter" uuid="{{endpoint.uuid}}" settings="targetEndpointStyle"></js-plumb-endpoint>
-        </div>
+    <h3 ng-click="setActiveState(state)">{{state.name}}</h3>
+    {{state.template}}
+    <div style="position:absolute; top:50%; right:0px;">
+        <js-plumb-endpoint ng-repeat="endpoint in state.sources" anchor="RightMiddle" uuid="{{endpoint.uuid}}" settings="sourceEndpointStyle">
+            <js-plumb-connection ng-click="setActiveConnection($index)" ng-repeat="connection in endpoint.connections" ng-model="connection">
+                    <div style="background-color:#ccc; border-radius:20px; width:40px; text-align:center; height:40px; position:relative; top:-20px; left:-20px;">
+                        <span ng-if="connection.type != 'Action'" style="margin-top:5px; color:#3860ff; font-size:25px;" class="glyphicon glyphicon-retweet" title="Transition To {{connection.uuid}}"></span>
+                        <span ng-if="connection.type == 'Action'" style="margin-top:5px;color:#ff7805; font-size:25px;" class="glyphicon glyphicon-flash" title="Trigger Action {{connection.uuid}}"></span>
+                    </div>
+            </js-plumb-connection>
+        </js-plumb-endpoint>
+    </div>
+    <div style="position:absolute; top:50%; left:0px;">
+        <js-plumb-endpoint ng-repeat="endpoint in state.targets" anchor="LeftMiddle" uuid="{{endpoint.uuid}}" settings="targetEndpointStyle"></js-plumb-endpoint>
     </div>
 </js-plumb-object>

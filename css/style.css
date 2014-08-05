@@ -3,7 +3,15 @@
     display:inline-block;
 
 }
-
+js-plumb-canvas{
+    background-image:url(../images/grid_background.gif);
+    background-repeat: repeat;
+    width: 55000px;
+    height: 55000px;
+    position: relative;
+    left:-100px;
+    top:-100px;
+}
 .state_window {
     border:1px solid #346789;
     box-shadow: 2px 2px 19px #aaa;
